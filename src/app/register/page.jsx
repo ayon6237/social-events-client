@@ -22,19 +22,20 @@ export default function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
     if (!hasUpperCase || !hasLowerCase || !hasMinLength) {
-      toast.error("Please fulfill all password requirements!");
+      toast.error("Please meet all password requirements!");
       return;
     }
 
     setLoading(true);
     try {
-      // ১. BetterAuth দিয়ে ইউজার ক্রিয়েট
+      // ✅ BetterAuth-এর signUp-এ 'image' ফিল্ডের মাধ্যমে photoURL পাঠানো হচ্ছে
       const { data, error } = await authClient.signUp.email({
         email: formData.email,
         password: formData.password,
         name: formData.name,
-        image: formData.photoURL
+        image: formData.photoURL, // ইমেজ সেভ করার জন্য
       });
 
       if (error) {
@@ -43,22 +44,14 @@ export default function Register() {
         return;
       }
 
-      // ২. Express Backend থেকে JWT টোকেন নেওয়া
-      const res = await fetch('http://localhost:5000/jwt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email })
-      });
-      const jwtData = await res.json();
+      // সেশন ক্লিয়ার করে লগইন পেজে পাঠানো
+      await authClient.signOut();
 
-      // ৩. টোকেন সেভ করা এবং রিডাইরেক্ট করা
-      if (jwtData.token) {
-        localStorage.setItem('access_token', jwtData.token);
-        toast.success("Account created successfully!");
-        router.push('/');
-      }
+      toast.success("Account created successfully! Please login now.");
+      router.push('/login');
+
     } catch (err) {
-      toast.error("Something went wrong!");
+      toast.error("Something went wrong during registration!");
     } finally {
       setLoading(false);
     }
@@ -83,7 +76,7 @@ export default function Register() {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="h-5 w-5 text-gray-400" />
               </div>
-              <input type="text" required className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600" placeholder="Tanvir Ahmed" onChange={(e) => setFormData({...formData, name: e.target.value})} />
+              <input type="text" required className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600" placeholder="Ayon Banerjee" onChange={(e) => setFormData({...formData, name: e.target.value})} />
             </div>
           </div>
 
@@ -97,13 +90,14 @@ export default function Register() {
             </div>
           </div>
 
+          {/* Image / Profile Photo URL Section */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photo URL</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <LinkIcon className="h-5 w-5 text-gray-400" />
               </div>
-              <input type="url" className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600" placeholder="https://..." onChange={(e) => setFormData({...formData, photoURL: e.target.value})} />
+              <input type="url" className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600" placeholder="https://images.unsplash.com/..." onChange={(e) => setFormData({...formData, photoURL: e.target.value})} />
             </div>
           </div>
 
