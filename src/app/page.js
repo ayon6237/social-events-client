@@ -4,6 +4,7 @@ import Hero from '@/components/Hero';
 import PlatForm from '@/components/PlatForm';
 import RecentEvents from '@/components/RecentEvents';
 import PastEvents from '@/components/PastEvents';
+import Subscription from '@/components/Subscription';
 
 const page = () => {
   return (
@@ -12,6 +13,7 @@ const page = () => {
       <PlatForm />
       <RecentEvents />
       <PastEvents />
+      <Subscription />
     </div>
   );
 };
