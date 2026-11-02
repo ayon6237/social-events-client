@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
-import { Edit, Trash2, PlusCircle, CalendarDays, MapPin, Loader2, Settings, AlertTriangle, X, Type, FolderDot, ImageIcon, AlignLeft, Send } from 'lucide-react';
+import { Edit, Trash2, PlusCircle, CalendarDays, MapPin, Loader2, Settings, AlertTriangle, X, Type, FolderDot, ImageIcon, AlignLeft, Send, Eye } from 'lucide-react';
 
 const CATEGORIES = ["Donation", "Cleanup", "Plantation", "Winter Relief", "Food Drive", "Health Camp", "Education"];
 
@@ -83,7 +83,7 @@ export default function ManageEvents() {
     setEditFormData({
       title: event.title,
       type: event.type,
-      date: event.date.split('T')[0], // Extracting YYYY-MM-DD
+      date: event.date.split('T')[0],
       location: event.location,
       thumbnail: event.thumbnail,
       description: event.description
@@ -112,8 +112,6 @@ export default function ManageEvents() {
 
       if (!res.ok) throw new Error("Failed to update event");
 
-      const updatedEvent = await res.json();
-      
       setEvents(events.map(ev => ev._id === editModal.eventId ? { ...ev, ...editFormData } : ev));
       
       toast.success("Event updated successfully!");
@@ -187,9 +185,19 @@ export default function ManageEvents() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {/* 🚨 View Details Button */}
+                          <Link 
+                            href={`/events/${event._id}`} 
+                            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-950/50 rounded-lg transition-colors border border-transparent hover:border-green-100" 
+                            title="View Details"
+                          >
+                            view details
+                          </Link>
+                          
                           <button onClick={() => openEditModal(event)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-lg transition-colors border border-transparent hover:border-blue-100" title="Edit Event">
                             <Edit size={18} />
                           </button>
+                          
                           <button onClick={() => confirmDelete(event._id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-lg transition-colors border border-transparent hover:border-red-100" title="Delete Event">
                             <Trash2 size={18} />
                           </button>
