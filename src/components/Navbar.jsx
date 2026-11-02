@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, X, UserCircle, LogOut, LogIn, Sun, Moon } from 'lucide-react';
+import { Menu, X, UserCircle, LogOut, LogIn, Sun, Moon, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
 
@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           
           <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center">
-             CommunePulse
+             SocialEvents
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
@@ -108,14 +108,16 @@ export default function Navbar() {
                 <div className="relative" ref={dropdownRef}>
                   <button 
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                    className="flex items-center gap-2 focus:outline-none"
+                    className="flex items-center gap-1.5 focus:outline-none p-1 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     title={user.name}
                   >
                     {user.image ? (
-                      <img referrerPolicy='no-referrer' src={user.image} alt="Profile" className="w-10 h-10 rounded-full border-2 border-blue-100 dark:border-gray-700 object-cover shadow-sm" />
+                      <img referrerPolicy='no-referrer' src={user.image} alt="Profile" className="w-9 h-9 rounded-full border-2 border-blue-100 dark:border-gray-700 object-cover shadow-sm" />
                     ) : (
-                      <UserCircle size={38} className="text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors" />
+                      <UserCircle size={36} className="text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors" />
                     )}
+                    {/* 👇 ড্রপডাউন অ্যারো আইকন */}
+                    <ChevronDown size={16} className={`text-gray-500 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {/* Dropdown Menu with Logout Button */}
@@ -130,7 +132,7 @@ export default function Navbar() {
                       <Link href="/manage-events" onClick={() => setIsProfileDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-colors">Manage Events</Link>
                       <Link href="/joined-events" onClick={() => setIsProfileDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-colors">Joined Events</Link>
                       
-                      {/* 🚨 Dropdown এর ভেতরে Logout বাটন */}
+                      {/* Dropdown এর ভেতরে Logout বাটন */}
                       <div className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-700 px-2">
                         <button 
                           onClick={handleLogout}
@@ -165,7 +167,7 @@ export default function Navbar() {
             </button>
 
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 dark:text-gray-300 hover:text-blue-600">
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              {isMobileMenuOpen ? <X size5={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
