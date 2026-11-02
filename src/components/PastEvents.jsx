@@ -5,12 +5,75 @@ import Link from 'next/link';
 import { Users, CalendarDays, Globe, HeartHandshake, ArrowRight, PlusCircle, Sparkles, MapPin, Loader2, History, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+// 🚨 নতুন এবং আকর্ষণীয় ছবির লিংকযুক্ত প্রিমিয়াম ডামি পাস্ট ইভেন্টস
+const DUMMY_PAST_EVENTS = [
+  {
+    _id: 'dummy_past_1',
+    title: 'Winter Warmth Blanket Distribution',
+    type: 'Winter Relief',
+    date: '2025-12-20',
+    location: 'Mirpur 10, Dhaka',
+    thumbnail: 'https://images.unsplash.com/photo-1785835394980-8c395e26ebdb?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
+    description: 'Successfully distributed over 500 thick blankets and warm winter clothing to underprivileged pavement dwellers and rickshaw pullers.',
+    creatorEmail: 'mirpur.volunteers@social.org'
+  },
+  {
+    _id: 'dummy_past_2',
+    title: 'Urban Riverside Cleanup Drive',
+    type: 'Cleanup',
+    date: '2026-01-15',
+    location: 'Hatirjheel Lake Area, Dhaka',
+    thumbnail: 'https://images.unsplash.com/photo-1594708767771-a7502209ff51?auto=format&fit=crop&q=80&w=800',
+    description: 'A community-led environmental campaign where 120+ active volunteers gathered to clear plastic waste and restore the lakeside walkway.',
+    creatorEmail: 'green.earth@social.org'
+  },
+  {
+    _id: 'dummy_past_3',
+    title: 'Free Health & Eye Care Camp',
+    type: 'Health Camp',
+    date: '2026-02-10',
+    location: 'Uttara Sector 7, Dhaka',
+    thumbnail: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800',
+    description: 'Provided free medical check-ups, blood pressure screenings, and essential eye medications to over 300 elderly citizens.',
+    creatorEmail: 'uttara.care@social.org'
+  },
+  {
+    _id: 'dummy_past_4',
+    title: 'Community Tree Plantation Campaign',
+    type: 'Plantation',
+    date: '2026-02-28',
+    location: 'Dhanmondi Lake, Dhaka',
+    thumbnail: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=800',
+    description: 'Planted over 400 saplings across the lake perimeter with student volunteers to boost urban greenery and oxygen levels.',
+    creatorEmail: 'eco.society@social.org'
+  },
+  {
+    _id: 'dummy_past_5',
+    title: 'Emergency Flood Relief Food Packets',
+    type: 'Food Drive',
+    date: '2026-03-05',
+    location: 'Sylhet Sadar, Sylhet',
+    thumbnail: 'https://images.unsplash.com/photo-1593113646773-028c64a8f1b8?auto=format&fit=crop&q=80&w=800',
+    description: 'Delivered dry food packets, safe drinking water, and emergency medical aid to flood-affected families in remote villages.',
+    creatorEmail: 'relief.corps@social.org'
+  },
+  {
+    _id: 'dummy_past_6',
+    title: 'Youth Digital Literacy Workshop',
+    type: 'Education',
+    date: '2026-03-18',
+    location: 'Agargaon, Dhaka',
+    thumbnail: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800',
+    description: 'Conducted a basic computer and internet safety training session for underprivileged school children to bridge the digital divide.',
+    creatorEmail: 'edu.future@social.org'
+  }
+];
+
 export default function Home() {
   const [recentEvents, setRecentEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Database theke real events fetch kora ebong upcoming & past event-e divide kora
   useEffect(() => {
     const fetchEventsData = async () => {
       try {
@@ -18,21 +81,22 @@ export default function Home() {
         if (!res.ok) throw new Error("Failed to fetch events");
         
         const data = await res.json();
-        
         const today = new Date().toISOString().split('T')[0];
         
-        // Upcoming events (date >= today)
+        // Upcoming events
         const upcoming = data.filter(event => new Date(event.date).toISOString().split('T')[0] >= today);
         const sortedUpcoming = upcoming.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setRecentEvents(sortedUpcoming.slice(0, 6));
 
-        // Past events (date < today)
-        const past = data.filter(event => new Date(event.date).toISOString().split('T')[0] < today);
-        const sortedPast = past.sort((a, b) => new Date(b.date) - new Date(a.date)); // Recent past first
+        // Past events from DB + Fallback to DUMMY_PAST_EVENTS
+        const dbPast = data.filter(event => new Date(event.date).toISOString().split('T')[0] < today);
+        const combinedPast = [...dbPast, ...DUMMY_PAST_EVENTS];
+        const sortedPast = combinedPast.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
         setPastEvents(sortedPast.slice(0, 6));
 
       } catch (error) {
-        toast.error("Could not load events data.");
+        setPastEvents(DUMMY_PAST_EVENTS);
       } finally {
         setIsLoading(false);
       }
@@ -160,7 +224,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Recent Upcoming Events Section (Database Connected - Limit 6) */}
+      {/* Recent Upcoming Events Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           
@@ -229,7 +293,7 @@ export default function Home() {
                     </div>
 
                     <Link 
-                      href={`/events/${event._id}`}
+                      href={event._id.startsWith('dummy') ? '#' : `/events/${event._id}`}
                       className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-bold transition-colors text-sm shadow-sm"
                     >
                       View Event <ArrowRight size={16} />
@@ -248,7 +312,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Past Completed Events Section (Database Connected) */}
+      {/* Past Completed Events Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/50 transition-colors">
         <div className="max-w-7xl mx-auto">
           
@@ -262,12 +326,7 @@ export default function Home() {
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="py-20 flex flex-col items-center justify-center text-blue-600">
-              <Loader2 className="h-8 w-8 animate-spin mb-2" />
-              <p className="font-medium text-sm">Loading past initiatives...</p>
-            </div>
-          ) : pastEvents.length > 0 ? (
+          {pastEvents.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {pastEvents.map((event) => (
                 <div key={event._id} className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full opacity-90">
@@ -300,21 +359,14 @@ export default function Home() {
                       {event.location}
                     </div>
                     
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 line-clamp-2 leading-relaxed flex-grow">
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2 line-clamp-2 leading-relaxed flex-grow">
                       {event.description}
                     </p>
                     
-                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-5 font-medium pt-4 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto">
                       <Users size={16} className="text-gray-400" />
                       Organized by: <span className="font-bold">{event.creatorEmail.split('@')[0]}</span>
                     </div>
-
-                    <Link 
-                      href={`/events/${event._id}`}
-                      className="w-full flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-3 rounded-xl font-bold transition-colors text-sm shadow-sm"
-                    >
-                      View Summary <ArrowRight size={16} />
-                    </Link>
                   </div>
 
                 </div>
@@ -322,7 +374,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
-              <p className="text-gray-500 dark:text-gray-400 font-medium">No past events found in the database yet.</p>
+              <p className="text-gray-500 dark:text-gray-400 font-medium">No past events found.</p>
             </div>
           )}
 
