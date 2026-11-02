@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Menu, X, UserCircle, LogOut, LogIn, Sun, Moon } from 'lucide-react';
@@ -12,6 +12,21 @@ export default function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
+
+  // Dropdown বাইরে ক্লিক করলে অটোমেটিক ক্লোজ করার জন্য ref
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Load saved theme
   useEffect(() => {
@@ -89,8 +104,8 @@ export default function Navbar() {
               </Link>
             ) : (
               <div className="flex items-center gap-4">
-                {/* Profile Icon with Dropdown */}
-                <div className="relative">
+                {/* Profile Icon with Dropdown & ref attached */}
+                <div className="relative" ref={dropdownRef}>
                   <button 
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                     className="flex items-center gap-2 focus:outline-none"
@@ -103,15 +118,27 @@ export default function Navbar() {
                     )}
                   </button>
 
+                  {/* Dropdown Menu with Logout Button */}
                   {isProfileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-xl py-2 z-50">
+                    <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-xl py-2 z-50">
                       <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700 mb-2">
                         <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{user.name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                       </div>
+                      
                       <Link href="/create-event" onClick={() => setIsProfileDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-colors">Create Event</Link>
                       <Link href="/manage-events" onClick={() => setIsProfileDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-colors">Manage Events</Link>
                       <Link href="/joined-events" onClick={() => setIsProfileDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-colors">Joined Events</Link>
+                      
+                      {/* 🚨 Dropdown এর ভেতরে Logout বাটন */}
+                      <div className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-700 px-2">
+                        <button 
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors"
+                        >
+                          <LogOut size={16} /> Logout
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
