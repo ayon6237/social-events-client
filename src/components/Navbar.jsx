@@ -75,7 +75,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           
           <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center">
-             SocialEvents
+             CommunePulse
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
