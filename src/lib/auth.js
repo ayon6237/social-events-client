@@ -1,4 +1,3 @@
-
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { jwt } from "better-auth/plugins";
@@ -7,31 +6,44 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGO_URI;
 
 if (!uri) {
-  throw new Error("MONGO_URI is missing from environment variables");
+  throw new Error("MONGO_URI is missing");
 }
 
-const client = new MongoClient(uri);
+// Reuse MongoClient in a warm serverless instance
+const globalForMongo = globalThis;
+
+const client =
+  globalForMongo.mongoClient ||
+  new MongoClient(uri);
+
+if (process.env.NODE_ENV !== "production") {
+  globalForMongo.mongoClient = client;
+}
+
 const db = client.db("social_events_db");
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
+  database: mongodbAdapter(db, { client }),
 
   secret: process.env.BETTER_AUTH_SECRET,
 
+  baseURL: process.env.BETTER_AUTH_URL,
+
   trustedOrigins: [
     "http://localhost:3000",
-    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.BETTER_AUTH_URL,
   ].filter(Boolean),
-
-  database: mongodbAdapter(db, {
-    client,
-  }),
 
   emailAndPassword: {
     enabled: true,
   },
 
-  plugins: [
-    jwt(),
-  ],
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  },
+
+  plugins: [jwt()],
 });
