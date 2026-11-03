@@ -9,7 +9,6 @@ if (!uri) {
   throw new Error("MONGO_URI is missing");
 }
 
-// Reuse MongoClient in a warm serverless instance
 const globalForMongo = globalThis;
 
 const client =
@@ -30,7 +29,6 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
 
   trustedOrigins: [
-    "http://localhost:3000",
     process.env.BETTER_AUTH_URL,
   ].filter(Boolean),
 
