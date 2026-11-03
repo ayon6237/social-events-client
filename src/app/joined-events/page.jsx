@@ -29,7 +29,7 @@ export default function JoinedEvents() {
   const fetchJoinedEvents = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const res = await fetch(`http://localhost:5000/joined-events/${session.user.email}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/joined-events/${session.user.email}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

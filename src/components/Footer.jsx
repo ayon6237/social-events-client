@@ -1,5 +1,7 @@
+
 import Link from 'next/link';
 import { HeartHandshake, Mail, Phone, MapPin, Globe, ArrowUpRight } from 'lucide-react';
+import CurrentYear from "./CurrentYear";
 
 export default function Footer() {
   return (
@@ -86,7 +88,7 @@ export default function Footer() {
 
         {/* Bottom Divider & Copyright */}
         <div className="pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
-          <p>&copy; {new Date().getFullYear()} CommunePulse Platform. All rights reserved.</p>
+          <p>&copy; <CurrentYear /> CommunePulse Platform. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span className="hover:text-blue-600 transition-colors cursor-pointer">Privacy Policy</span>
             <span className="hover:text-blue-600 transition-colors cursor-pointer">Terms of Service</span>

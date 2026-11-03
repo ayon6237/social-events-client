@@ -45,7 +45,7 @@ export default function ManageEvents() {
   const fetchMyEvents = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const res = await fetch(`http://localhost:5000/my-events/${session.user.email}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-events/${session.user.email}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error("Failed to fetch events");
@@ -64,7 +64,7 @@ export default function ManageEvents() {
   const executeDelete = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const res = await fetch(`http://localhost:5000/events/${deleteModal.eventId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${deleteModal.eventId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -101,7 +101,7 @@ export default function ManageEvents() {
     setIsUpdating(true);
     try {
       const token = localStorage.getItem('access_token');
-      const res = await fetch(`http://localhost:5000/events/${editModal.eventId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${editModal.eventId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

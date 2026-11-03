@@ -37,7 +37,7 @@ export default function Login() {
       }
 
       // ২. Express Backend থেকে JWT টোকেন নেওয়া
-      const res = await fetch('http://localhost:5000/jwt', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jwt`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
