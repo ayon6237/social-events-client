@@ -16,7 +16,6 @@ import {
   CheckCircle,
   ShieldAlert,
   Sparkles,
-  Clock,
   Share2
 } from 'lucide-react';
 
@@ -219,14 +218,25 @@ function EventDetailsContent() {
             {/* Left Column: Image & Details */}
             <div className="lg:col-span-8 flex flex-col border-r border-gray-200 dark:border-gray-800">
               
-              {/* Event Image */}
-              <div className="relative h-[300px] sm:h-[400px] w-full bg-gray-100 dark:bg-gray-800">
+              {/* Event Image with Blurred Backdrop */}
+              <div className="relative h-[300px] sm:h-[400px] w-full bg-gray-900 overflow-hidden flex items-center justify-center">
+                
+                {/* Background Blurred Image (To fill empty spaces) */}
+                <img
+                  src={event.thumbnail}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110"
+                />
+                
+                {/* Main Visible Image (Uncropped) */}
                 <img
                   src={event.thumbnail}
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
                 />
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/90 dark:bg-gray-900/90 text-blue-700 dark:text-blue-400 shadow-sm backdrop-blur-sm border border-white/20 dark:border-gray-700/50">
+
+                {/* Event Category Tag */}
+                <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/90 dark:bg-gray-900/90 text-blue-700 dark:text-blue-400 shadow-sm backdrop-blur-md border border-white/20 dark:border-gray-700/50">
                   <Sparkles size={14} />
                   {event.type}
                 </div>
