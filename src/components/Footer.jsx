@@ -1,18 +1,17 @@
-
 import Link from 'next/link';
-import { HeartHandshake, Mail, Phone, MapPin, Globe, ArrowUpRight } from 'lucide-react';
+import { HeartHandshake, Mail, Phone, MapPin } from 'lucide-react';
 import CurrentYear from "./CurrentYear";
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-t border-gray-200 dark:border-gray-800 transition-colors pt-16 pb-12">
+    <footer className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-t border-gray-200 dark:border-gray-800 transition-colors pt-12 md:pt-16 pb-8 md:pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Grid Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-10 mb-10 md:mb-12">
           
           {/* Brand & About */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="sm:col-span-2 space-y-4">
             <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
               <HeartHandshake size={28} /> CommunePulse
             </Link>
@@ -70,16 +69,16 @@ export default function Footer() {
             <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 mb-4">Get in Touch</h4>
             <ul className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start gap-2">
-                <MapPin size={16} className="text-blue-600 dark:text-blue-400 shrink-0 mt-1" />
+                <MapPin size={16} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                 <span>Sonadanga, Khulna, Bangladesh</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                <span>ayon6237@gmail.com</span>
+                <a href="mailto:ayon6237@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">ayon6237@gmail.com</a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                <span>+880 1780 938835</span>
+                <a href="tel:+8801780938835" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">+880 1780 938835</a>
               </li>
             </ul>
           </div>
@@ -87,9 +86,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom Divider & Copyright */}
-        <div className="pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
-          <p>&copy; <CurrentYear /> CommunePulse Platform. All rights reserved.</p>
-          <div className="flex items-center gap-6">
+        <div className="pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-center md:text-left">&copy; <CurrentYear /> CommunePulse Platform. All rights reserved.</p>
+          <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 sm:gap-6">
             <span className="hover:text-blue-600 transition-colors cursor-pointer">Privacy Policy</span>
             <span className="hover:text-blue-600 transition-colors cursor-pointer">Terms of Service</span>
             <span className="hover:text-blue-600 transition-colors cursor-pointer">Community Guidelines</span>
