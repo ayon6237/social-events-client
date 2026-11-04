@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 💙 CommunePulse 
 
-## Getting Started
+> **Empowering communities and connecting compassionate citizens with direct local volunteer initiatives, charity drives, and social development campaigns.**
 
-First, run the development server:
+![CommunePulse Banner](https://via.placeholder.com/1200x400/1E3A8A/FFFFFF?text=CommunePulse+-+Community+Volunteer+Platform)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+CommunePulse is a full-stack web application designed to bridge the gap between event organizers and volunteers. Users can seamlessly browse upcoming social initiatives, register as volunteers, and organizers can effortlessly create and manage their campaigns.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## ✨ Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **🔐 Robust Authentication:** Secure Email/Password and **Google OAuth** login powered by `Better Auth` and `JWT`.
+- **📅 Event Management:** Organizers can create, update, and delete community events.
+- **🤝 Volunteer Participation:** Users can join events with a single click and track their volunteer schedules.
+- **🎨 Modern UI/UX:** Fully responsive, beautiful interfaces built with **Tailwind CSS**.
+- **🌙 Dark Mode Support:** Seamless transition between Light and Dark themes for better user experience.
+- **🛡️ Protected Routes:** JWT-secured backend endpoints to ensure data privacy and role-based access.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Frontend
+- **Framework:** [Next.js](https://nextjs.org/) (App/Pages Router)
+- **Styling:** Tailwind CSS
+- **Authentication:** [Better Auth](https://better-auth.com/)
+- **Icons & Alerts:** Lucide React, React Hot Toast
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB & Mongoose
+- **Security:** JSON Web Tokens (JWT), CORS
 
-## Deploy on Vercel
+### Deployment
+- **Frontend:** Vercel
+- **Backend:** Vercel / Render
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚙️ Environment Variables
+
+To run this project, you will need to add the following environment variables to your respective `.env` files.
+
+### Frontend (`.env.local`)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000  # Or your live backend URL
+BETTER_AUTH_URL=http://localhost:3000      # Or your live frontend URL
+BETTER_AUTH_SECRET=your_super_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
