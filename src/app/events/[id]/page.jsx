@@ -351,7 +351,7 @@ function EventDetailsContent() {
                       ) : (
                         <>
                           <HeartHandshake size={22} />
-                          Volunteer Now
+                          Join this Event
                         </>
                       )}
                     </button>
