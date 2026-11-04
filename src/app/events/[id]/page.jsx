@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -16,7 +15,9 @@ import {
   HeartHandshake,
   CheckCircle,
   ShieldAlert,
-  Sparkles
+  Sparkles,
+  Clock,
+  Share2
 } from 'lucide-react';
 
 // Main Event Details Component
@@ -170,10 +171,10 @@ function EventDetailsContent() {
   // 4. Loading State
   if (isLoading || sessionPending || !event) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center text-blue-600 dark:bg-gray-950">
-        <Loader2 className="h-10 w-10 animate-spin mb-4" />
+      <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950 text-blue-600 dark:text-blue-400">
+        <Loader2 className="h-12 w-12 animate-spin mb-4" />
         <p className="font-bold text-lg">
-          Loading details...
+          Preparing event details...
         </p>
       </div>
     );
@@ -183,183 +184,186 @@ function EventDetailsContent() {
     session?.user?.email === event.creatorEmail;
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-20 transition-colors">
-
-      {/* Hero Banner Section */}
-      <div className="w-full h-[35vh] md:h-[45vh] relative bg-gray-900">
-        <img
-          src={event.thumbnail}
-          alt={event.title}
-          className="w-full h-full object-cover opacity-60"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
-
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 py-12 transition-colors">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Top Navigation & Actions */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium mb-4 transition-colors group bg-black/30 px-3.5 py-2 rounded-lg backdrop-blur-sm w-fit text-sm"
+            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors group"
           >
             <ArrowLeft
-              size={16}
+              size={18}
               className="group-hover:-translate-x-1 transition-transform"
             />
-            Back to All Events
+            Back to All Initiatives
           </Link>
-
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-blue-600 text-white mb-3 shadow-sm">
-            <Sparkles size={14} />
-            {event.type}
-          </div>
-
-          <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight leading-snug max-w-4xl">
-            {event.title}
-          </h1>
+          
+          <button 
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.success("Event link copied to clipboard!");
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-semibold shadow-sm transition-colors"
+          >
+            <Share2 size={16} /> Share Event
+          </button>
         </div>
-      </div>
 
-      {/* Main Grid Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-          {/* Left Side: About Initiative */}
-          <div className="lg:col-span-7 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 md:p-8">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
-              About the Initiative
-            </h3>
-
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-base">
-              {event.description}
-            </p>
-          </div>
-
-          {/* Right Side: Event Summary */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800 overflow-hidden w-full max-w-md">
-
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white">
-                <h3 className="text-lg font-bold">
-                  Event Summary
-                </h3>
-
-                <p className="text-blue-100 text-xs mt-0.5">
-                  Review venue and schedule
-                </p>
+        {/* Main Content Container */}
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+            
+            {/* Left Column: Image & Details */}
+            <div className="lg:col-span-8 flex flex-col border-r border-gray-200 dark:border-gray-800">
+              
+              {/* Event Image */}
+              <div className="relative h-[300px] sm:h-[400px] w-full bg-gray-100 dark:bg-gray-800">
+                <img
+                  src={event.thumbnail}
+                  alt={event.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/90 dark:bg-gray-900/90 text-blue-700 dark:text-blue-400 shadow-sm backdrop-blur-sm border border-white/20 dark:border-gray-700/50">
+                  <Sparkles size={14} />
+                  {event.type}
+                </div>
               </div>
 
-              <div className="p-5 space-y-4">
-
-                {/* Event Date */}
-                <div className="flex items-start gap-3.5 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                    <CalendarDays size={18} />
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-400 font-bold uppercase tracking-wider">
-                      Date
-                    </p>
-
-                    <p className="text-gray-900 dark:text-gray-200 font-bold text-sm mt-0.5">
-                      {new Date(event.date).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      })}
-                    </p>
-                  </div>
+              {/* Event Title & Description */}
+              <div className="p-8 sm:p-10 flex-grow">
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-6">
+                  {event.title}
+                </h1>
+                
+                <div className="prose dark:prose-invert max-w-none">
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                    About this initiative
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-base sm:text-lg">
+                    {event.description}
+                  </p>
                 </div>
-
-                {/* Event Location */}
-                <div className="flex items-start gap-3.5 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                    <MapPin size={18} />
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-400 font-bold uppercase tracking-wider">
-                      Location
-                    </p>
-
-                    <p className="text-gray-900 dark:text-gray-200 font-bold text-sm mt-0.5">
-                      {event.location}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Event Organizer */}
-                <div className="flex items-start gap-3.5 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                    <Users size={18} />
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-400 font-bold uppercase tracking-wider">
-                      Organized By
-                    </p>
-
-                    <p className="text-gray-900 dark:text-gray-200 font-bold text-sm mt-0.5">
-                      {event.creatorEmail.split('@')[0]}
-                    </p>
-
-                    <p className="text-[11px] text-gray-400">
-                      {event.creatorEmail}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Join Event Button */}
-                <div className="pt-2">
-                  {isOrganizer ? (
-                    <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-amber-800 dark:text-amber-300 text-center font-bold text-xs flex items-center justify-center gap-2">
-                      <ShieldAlert size={16} />
-                      You are the organizer of this event
-                    </div>
-                  ) : (
-                    <>
-                      <button
-                        onClick={handleJoinEvent}
-                        disabled={isJoining || hasJoined}
-                        className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-base transition-all shadow-md ${
-                          hasJoined
-                            ? 'bg-green-600 text-white shadow-green-100 dark:shadow-none cursor-default opacity-100'
-                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-100 dark:shadow-none'
-                        }`}
-                      >
-                        {hasJoined ? (
-                          <>
-                            Joined Successfully
-                            <CheckCircle size={20} />
-                          </>
-                        ) : isJoining ? (
-                          "Processing..."
-                        ) : (
-                          <>
-                            Join as Volunteer
-                            <HeartHandshake size={20} />
-                          </>
-                        )}
-                      </button>
-
-                      {hasJoined && (
-                        <div className="text-center mt-3">
-                          <Link
-                            href="/joined-events"
-                            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
-                          >
-                            View in Joined Events &rarr;
-                          </Link>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-
               </div>
             </div>
-          </div>
 
+            {/* Right Column: Sidebar info & Actions */}
+            <div className="lg:col-span-4 bg-gray-50/50 dark:bg-gray-900/50 p-8 sm:p-10 flex flex-col justify-between">
+              
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-5">
+                    Event Details
+                  </h3>
+                  
+                  <div className="space-y-5">
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
+                        <CalendarDays size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">Date</p>
+                        <p className="text-gray-900 dark:text-gray-100 font-bold mt-0.5">
+                          {new Date(event.date).toLocaleDateString('en-GB', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-900">
+                        <MapPin size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">Location</p>
+                        <p className="text-gray-900 dark:text-gray-100 font-bold mt-0.5 leading-snug">
+                          {event.location}
+                        </p>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
+                  <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-5">
+                    Organizer
+                  </h3>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center shrink-0 border-2 border-white dark:border-gray-900 shadow-sm">
+                      <Users size={22} className="text-gray-500 dark:text-gray-400" />
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-gray-900 dark:text-gray-100 font-bold truncate">
+                        {event.creatorEmail.split('@')[0]}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {event.creatorEmail}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800">
+                {isOrganizer ? (
+                  <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-amber-800 dark:text-amber-300 text-center font-bold text-sm flex flex-col items-center justify-center gap-2">
+                    <ShieldAlert size={24} className="opacity-80" />
+                    You are organizing this event
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleJoinEvent}
+                      disabled={isJoining || hasJoined}
+                      className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-md ${
+                        hasJoined
+                          ? 'bg-green-600 text-white shadow-green-100 dark:shadow-none cursor-default opacity-100'
+                          : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none hover:-translate-y-0.5'
+                      }`}
+                    >
+                      {hasJoined ? (
+                        <>
+                          <CheckCircle size={22} />
+                          Joined Successfully
+                        </>
+                      ) : isJoining ? (
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                      ) : (
+                        <>
+                          <HeartHandshake size={22} />
+                          Volunteer Now
+                        </>
+                      )}
+                    </button>
+
+                    {hasJoined && (
+                      <div className="text-center mt-4">
+                        <Link
+                          href="/joined-events"
+                          className="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1 transition-colors"
+                        >
+                          View your schedule &rarr;
+                        </Link>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+            </div>
+          </div>
         </div>
+        
       </div>
     </div>
   );
@@ -370,8 +374,8 @@ export default function EventDetails() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-[80vh] flex flex-col items-center justify-center text-blue-600 dark:bg-gray-950">
-          <Loader2 className="h-10 w-10 animate-spin mb-4" />
+        <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950 text-blue-600 dark:text-blue-400">
+          <Loader2 className="h-12 w-12 animate-spin mb-4" />
           <p className="font-bold text-lg">
             Loading event details...
           </p>
